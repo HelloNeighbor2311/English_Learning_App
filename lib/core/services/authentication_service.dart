@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthenticationService {
@@ -6,8 +7,19 @@ class AuthenticationService {
 
   static final AuthenticationService instance = AuthenticationService._();
 
+  static const String _googleWebClientId = String.fromEnvironment(
+    'GOOGLE_WEB_CLIENT_ID',
+  );
+
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  GoogleSignIn? _googleSignIn;
+
+  GoogleSignIn _getGoogleSignIn() {
+    _googleSignIn ??= _googleWebClientId.isNotEmpty
+        ? GoogleSignIn(clientId: _googleWebClientId)
+        : GoogleSignIn();
+    return _googleSignIn!;
+  }
 
   User? get currentUser => _firebaseAuth.currentUser;
 
@@ -37,7 +49,14 @@ class AuthenticationService {
 
   // Sign in with Google
   Future<UserCredential> signInWithGoogle() async {
-    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+    if (kIsWeb && _googleWebClientId.isEmpty) {
+      throw Exception(
+        'Thiếu GOOGLE_WEB_CLIENT_ID cho web. '
+        'Hãy chạy với --dart-define=GOOGLE_WEB_CLIENT_ID=<your-client-id>.',
+      );
+    }
+
+    final GoogleSignInAccount? googleUser = await _getGoogleSignIn().signIn();
     if (googleUser == null) {
       throw Exception('Google sign-in cancelled');
     }
@@ -55,7 +74,11 @@ class AuthenticationService {
 
   // Sign out
   Future<void> signOut() async {
-    await Future.wait([_firebaseAuth.signOut(), _googleSignIn.signOut()]);
+    final futures = <Future<void>>[_firebaseAuth.signOut()];
+    if (_googleSignIn != null) {
+      futures.add(_googleSignIn!.signOut());
+    }
+    await Future.wait(futures);
   }
 
   // Reset password
