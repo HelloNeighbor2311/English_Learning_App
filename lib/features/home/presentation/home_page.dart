@@ -21,10 +21,14 @@ class _HomePageState extends State<HomePage> {
     });
 
     try {
-      final id = DateTime.now().millisecondsSinceEpoch.toString();
       final userId = AuthenticationService.instance.currentUser?.uid;
+      if (userId == null) {
+        throw Exception('Bạn chưa đăng nhập.');
+      }
+
+      final id = DateTime.now().millisecondsSinceEpoch.toString();
       await FirestoreService.instance.setDocument(
-        collectionPath: 'app_logs',
+        collectionPath: 'users/$userId/app_logs',
         documentId: id,
         data: {
           'type': 'firestore_connection_test',
