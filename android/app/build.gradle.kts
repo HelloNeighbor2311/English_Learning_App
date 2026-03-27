@@ -40,6 +40,20 @@ android {
     }
 }
 
+dependencies {
+    // Import the Firebase BoM
+    implementation(platform("com.google.firebase:firebase-bom:34.11.0"))
+
+    // Add the dependencies for Firebase Cloud Firestore
+    implementation("com.google.firebase:firebase-firestore")
+
+    // Add the dependencies for Firebase Authentication
+    implementation("com.google.firebase:firebase-auth")
+
+    // Add other Firebase products as needed
+    implementation("com.google.firebase:firebase-analytics")
+}
+
 flutter {
     source = "../.."
 }
