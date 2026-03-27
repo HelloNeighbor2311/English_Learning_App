@@ -14,6 +14,8 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage>
     with SingleTickerProviderStateMixin {
+  static const String _appName = 'English Learning App';
+
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
@@ -129,7 +131,7 @@ class _SignInPageState extends State<SignInPage>
                         constraints: const BoxConstraints(maxWidth: 390),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: const Color(0xFFFDFEFF),
                             borderRadius: BorderRadius.circular(24),
                             boxShadow: const [
                               BoxShadow(
@@ -139,287 +141,313 @@ class _SignInPageState extends State<SignInPage>
                               ),
                             ],
                           ),
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                top: 96,
-                                left: 0,
-                                child: Container(
-                                  width: 140,
-                                  height: 88,
-                                  decoration: const BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Color(0xFF5C8EFF),
-                                        Color(0xFF739BFF),
-                                      ],
-                                    ),
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(28),
-                                      bottomRight: Radius.circular(28),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 66,
-                                right: 0,
-                                child: Container(
-                                  width: 132,
-                                  height: 84,
-                                  decoration: const BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Color(0xFFCC57D1),
-                                        Color(0xFF7E67F2),
-                                      ],
-                                    ),
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(36),
-                                      bottomLeft: Radius.circular(36),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                  20,
-                                  24,
-                                  20,
-                                  16,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    const Center(
-                                      child: Text(
-                                        'LOGO',
-                                        style: TextStyle(
-                                          fontSize: 36,
-                                          letterSpacing: 2.4,
-                                          color: Color(0xFF9AA0B5),
-                                          fontWeight: FontWeight.w300,
-                                        ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(24),
+                            child: Stack(
+                              children: [
+                                Positioned(
+                                  top: 136,
+                                  left: 0,
+                                  child: Container(
+                                    width: 136,
+                                    height: 82,
+                                    decoration: const BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Color(0xAA5C8EFF),
+                                          Color(0xAA739BFF),
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(28),
+                                        bottomRight: Radius.circular(28),
                                       ),
                                     ),
-                                    const SizedBox(height: 24),
-                                    Row(
-                                      children: [
-                                        const Expanded(
-                                          child: Text(
-                                            'Đăng nhập',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              color: Color(0xFF4A5A85),
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: 72,
+                                  right: 0,
+                                  child: Container(
+                                    width: 126,
+                                    height: 80,
+                                    decoration: const BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Color(0x99CC57D1),
+                                          Color(0x997E67F2),
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(36),
+                                        bottomLeft: Radius.circular(36),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                    20,
+                                    24,
+                                    20,
+                                    16,
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      const Center(
+                                        child: Text(
+                                          _appName,
+                                          style: TextStyle(
+                                            fontSize: 28,
+                                            letterSpacing: 0.2,
+                                            color: Color(0xFF7C86A3),
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 24),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 6,
+                                          vertical: 6,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFFF1F4FF),
+                                          borderRadius: BorderRadius.circular(
+                                            16,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            const Expanded(
+                                              child: Text(
+                                                'Đăng nhập',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  color: Color(0xFF4A5A85),
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: TextButton(
+                                                onPressed: _isLoading
+                                                    ? null
+                                                    : widget.onSignUpPressed,
+                                                child: const Text(
+                                                  'Đăng ký',
+                                                  style: TextStyle(
+                                                    color: Color(0xFF8A93A8),
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 14),
+                                      Container(
+                                        padding: const EdgeInsets.fromLTRB(
+                                          16,
+                                          16,
+                                          16,
+                                          14,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFFFBFCFF),
+                                          borderRadius: BorderRadius.circular(
+                                            18,
+                                          ),
+                                          boxShadow: const [
+                                            BoxShadow(
+                                              color: Color(0x201B1A3D),
+                                              blurRadius: 20,
+                                              offset: Offset(0, 8),
+                                            ),
+                                          ],
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            _buildInput(
+                                              controller: _emailController,
+                                              hint: 'Email',
+                                              icon: Icons.email_outlined,
+                                              enabled: !_isLoading,
+                                            ),
+                                            const SizedBox(height: 12),
+                                            _buildInput(
+                                              controller: _passwordController,
+                                              hint: 'Mật khẩu',
+                                              icon: _obscurePassword
+                                                  ? Icons.visibility_outlined
+                                                  : Icons
+                                                        .visibility_off_outlined,
+                                              enabled: !_isLoading,
+                                              obscureText: _obscurePassword,
+                                              onIconTap: () {
+                                                if (_isLoading) return;
+                                                setState(() {
+                                                  _obscurePassword =
+                                                      !_obscurePassword;
+                                                });
+                                              },
+                                            ),
+                                            Align(
+                                              alignment: Alignment.centerRight,
+                                              child: TextButton(
+                                                onPressed: _isLoading
+                                                    ? null
+                                                    : () {
+                                                        ScaffoldMessenger.of(
+                                                          context,
+                                                        ).showSnackBar(
+                                                          const SnackBar(
+                                                            content: Text(
+                                                              'Tính năng quên mật khẩu sẽ được cập nhật sớm.',
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                child: const Text(
+                                                  'Quên mật khẩu?',
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            AnimatedSwitcher(
+                                              duration: const Duration(
+                                                milliseconds: 220,
+                                              ),
+                                              child: _errorMessage == null
+                                                  ? const SizedBox(
+                                                      key: ValueKey('no_error'),
+                                                    )
+                                                  : Padding(
+                                                      key: ValueKey(
+                                                        _errorMessage,
+                                                      ),
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                            bottom: 8,
+                                                          ),
+                                                      child:
+                                                          StatusMessageBanner(
+                                                            message:
+                                                                _errorMessage!,
+                                                            isError: true,
+                                                          ),
+                                                    ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Transform.translate(
+                                        offset: const Offset(0, -12),
+                                        child: Center(
+                                          child: AnimatedScale(
+                                            scale: _isLoading ? 0.98 : 1,
+                                            duration: const Duration(
+                                              milliseconds: 150,
+                                            ),
+                                            child: DecoratedBox(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(999),
+                                                gradient: const LinearGradient(
+                                                  colors: [
+                                                    Color(0xFF3AD8F6),
+                                                    Color(0xFF4F8BFF),
+                                                  ],
+                                                ),
+                                                boxShadow: const [
+                                                  BoxShadow(
+                                                    color: Color(0x5544A3FF),
+                                                    blurRadius: 14,
+                                                    offset: Offset(0, 7),
+                                                  ),
+                                                ],
+                                              ),
+                                              child: ElevatedButton(
+                                                onPressed: _isLoading
+                                                    ? null
+                                                    : _signInWithEmail,
+                                                style: ElevatedButton.styleFrom(
+                                                  elevation: 0,
+                                                  shadowColor:
+                                                      Colors.transparent,
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  foregroundColor: Colors.white,
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                        horizontal: 34,
+                                                        vertical: 14,
+                                                      ),
+                                                ),
+                                                child: _isLoading
+                                                    ? const SizedBox(
+                                                        width: 18,
+                                                        height: 18,
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                              strokeWidth: 2,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                      )
+                                                    : const Text('Login'),
+                                              ),
                                             ),
                                           ),
                                         ),
-                                        Expanded(
-                                          child: TextButton(
+                                      ),
+                                      OutlinedButton.icon(
+                                        onPressed: _isLoading
+                                            ? null
+                                            : _signInWithGoogle,
+                                        icon: const Icon(
+                                          Icons.g_mobiledata_rounded,
+                                          size: 24,
+                                        ),
+                                        label: const Text(
+                                          'Tiếp tục với Google',
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Text(
+                                            'Chưa có tài khoản?',
+                                            style: TextStyle(
+                                              color: Color(0xFF6F7890),
+                                            ),
+                                          ),
+                                          TextButton(
                                             onPressed: _isLoading
                                                 ? null
                                                 : widget.onSignUpPressed,
                                             child: const Text(
                                               'Đăng ký',
                                               style: TextStyle(
-                                                color: Color(0xFF8A93A8),
-                                                fontWeight: FontWeight.w500,
+                                                color: Color(0xFF7E45D6),
+                                                fontWeight: FontWeight.w700,
                                               ),
                                             ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Container(
-                                      padding: const EdgeInsets.fromLTRB(
-                                        16,
-                                        16,
-                                        16,
-                                        14,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(18),
-                                        boxShadow: const [
-                                          BoxShadow(
-                                            color: Color(0x201B1A3D),
-                                            blurRadius: 20,
-                                            offset: Offset(0, 8),
                                           ),
                                         ],
                                       ),
-                                      child: Column(
-                                        children: [
-                                          _buildInput(
-                                            controller: _emailController,
-                                            hint: 'Email',
-                                            icon: Icons.email_outlined,
-                                            enabled: !_isLoading,
-                                          ),
-                                          const SizedBox(height: 12),
-                                          _buildInput(
-                                            controller: _passwordController,
-                                            hint: 'Mật khẩu',
-                                            icon: _obscurePassword
-                                                ? Icons.visibility_outlined
-                                                : Icons.visibility_off_outlined,
-                                            enabled: !_isLoading,
-                                            obscureText: _obscurePassword,
-                                            onIconTap: () {
-                                              if (_isLoading) return;
-                                              setState(() {
-                                                _obscurePassword =
-                                                    !_obscurePassword;
-                                              });
-                                            },
-                                          ),
-                                          Align(
-                                            alignment: Alignment.centerRight,
-                                            child: TextButton(
-                                              onPressed: _isLoading
-                                                  ? null
-                                                  : () {
-                                                      ScaffoldMessenger.of(
-                                                        context,
-                                                      ).showSnackBar(
-                                                        const SnackBar(
-                                                          content: Text(
-                                                            'Tính năng quên mật khẩu sẽ được cập nhật sớm.',
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                              child: const Text(
-                                                'Quên mật khẩu?',
-                                                style: TextStyle(fontSize: 12),
-                                              ),
-                                            ),
-                                          ),
-                                          AnimatedSwitcher(
-                                            duration: const Duration(
-                                              milliseconds: 220,
-                                            ),
-                                            child: _errorMessage == null
-                                                ? const SizedBox(
-                                                    key: ValueKey('no_error'),
-                                                  )
-                                                : Padding(
-                                                    key: ValueKey(
-                                                      _errorMessage,
-                                                    ),
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                          bottom: 8,
-                                                        ),
-                                                    child: StatusMessageBanner(
-                                                      message: _errorMessage!,
-                                                      isError: true,
-                                                    ),
-                                                  ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Transform.translate(
-                                      offset: const Offset(0, -12),
-                                      child: Center(
-                                        child: AnimatedScale(
-                                          scale: _isLoading ? 0.98 : 1,
-                                          duration: const Duration(
-                                            milliseconds: 150,
-                                          ),
-                                          child: DecoratedBox(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(999),
-                                              gradient: const LinearGradient(
-                                                colors: [
-                                                  Color(0xFF3AD8F6),
-                                                  Color(0xFF4F8BFF),
-                                                ],
-                                              ),
-                                              boxShadow: const [
-                                                BoxShadow(
-                                                  color: Color(0x5544A3FF),
-                                                  blurRadius: 14,
-                                                  offset: Offset(0, 7),
-                                                ),
-                                              ],
-                                            ),
-                                            child: ElevatedButton(
-                                              onPressed: _isLoading
-                                                  ? null
-                                                  : _signInWithEmail,
-                                              style: ElevatedButton.styleFrom(
-                                                elevation: 0,
-                                                shadowColor: Colors.transparent,
-                                                backgroundColor:
-                                                    Colors.transparent,
-                                                foregroundColor: Colors.white,
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                      horizontal: 34,
-                                                      vertical: 14,
-                                                    ),
-                                              ),
-                                              child: _isLoading
-                                                  ? const SizedBox(
-                                                      width: 18,
-                                                      height: 18,
-                                                      child:
-                                                          CircularProgressIndicator(
-                                                            strokeWidth: 2,
-                                                            color: Colors.white,
-                                                          ),
-                                                    )
-                                                  : const Text('Login'),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    OutlinedButton.icon(
-                                      onPressed: _isLoading
-                                          ? null
-                                          : _signInWithGoogle,
-                                      icon: const Icon(
-                                        Icons.g_mobiledata_rounded,
-                                        size: 24,
-                                      ),
-                                      label: const Text('Tiếp tục với Google'),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Text(
-                                          'Chưa có tài khoản?',
-                                          style: TextStyle(
-                                            color: Color(0xFF6F7890),
-                                          ),
-                                        ),
-                                        TextButton(
-                                          onPressed: _isLoading
-                                              ? null
-                                              : widget.onSignUpPressed,
-                                          child: const Text(
-                                            'Đăng ký',
-                                            style: TextStyle(
-                                              color: Color(0xFF7E45D6),
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
