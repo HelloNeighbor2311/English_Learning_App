@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> {
     try {
       // Initialize Firebase
       await FirebaseBootstrap.initialize();
-      
+
       // Initialize Supabase
       await SupabaseService.instance.initialize(
         supabaseUrl: 'https://addjdomywbpzguehtdgi.supabase.co',
@@ -115,9 +115,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
+            body: Center(child: CircularProgressIndicator()),
           );
         }
 
@@ -131,10 +129,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
                   const SizedBox(height: 16),
                   const Text('Lỗi xác thực'),
                   const SizedBox(height: 8),
-                  Text(
-                    'Error: ${snapshot.error}',
-                    textAlign: TextAlign.center,
-                  ),
+                  Text('Error: ${snapshot.error}', textAlign: TextAlign.center),
                   const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: () => setState(() => _isSignIn = true),
@@ -168,11 +163,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
         }
 
         // Loading state
-        return const Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(),
-          ),
-        );
+        return const Scaffold(body: Center(child: CircularProgressIndicator()));
       },
     );
   }
