@@ -46,5 +46,4 @@ app.*.map.json
 
 # Additional generated outputs
 **/build/
-/android/app/build/
-/android/build/
+/android/**/build/
