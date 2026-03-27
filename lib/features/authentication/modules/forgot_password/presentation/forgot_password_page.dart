@@ -1,4 +1,14 @@
-﻿// Feature: authentication | Module: forgot_password
+﻿import 'package:flutter/material.dart';
 
-class ForgotPasswordPage {}
+import 'package:english_learning_app/shared/widgets/feature_placeholder_screen.dart';
 
+class ForgotPasswordPage extends StatelessWidget {
+  const ForgotPasswordPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const FeaturePlaceholderScreen(
+      title: 'Forgot Password',
+    );
+  }
+}

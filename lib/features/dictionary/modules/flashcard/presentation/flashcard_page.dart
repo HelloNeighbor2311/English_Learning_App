@@ -1,4 +1,14 @@
-﻿// Feature: dictionary | Module: flashcard
+﻿import 'package:flutter/material.dart';
 
-class FlashcardPage {}
+import 'package:english_learning_app/shared/widgets/feature_placeholder_screen.dart';
 
+class FlashcardPage extends StatelessWidget {
+  const FlashcardPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const FeaturePlaceholderScreen(
+      title: 'Flashcard',
+    );
+  }
+}

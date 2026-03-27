@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:english_learning_app/core/services/authentication_service.dart';
-import 'package:english_learning_app/shared/widgets/auth/auth_background.dart';
-import 'package:english_learning_app/shared/widgets/auth/auth_card.dart';
 import 'package:english_learning_app/shared/widgets/auth/status_message_banner.dart';
 
 class SignInPage extends StatefulWidget {
@@ -103,217 +101,399 @@ class _SignInPageState extends State<SignInPage>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
-      body: AuthBackground(
-        child: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-              child: FadeTransition(
-                opacity: _fadeAnimation,
-                child: SlideTransition(
-                  position: _slideAnimation,
-                  child: AuthCard(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        TweenAnimationBuilder<double>(
-                          tween: Tween(begin: 0.92, end: 1),
-                          duration: const Duration(milliseconds: 520),
-                          curve: Curves.easeOutBack,
-                          builder: (context, value, child) {
-                            return Transform.scale(scale: value, child: child);
-                          },
-                          child: const Icon(
-                            Icons.school_rounded,
-                            size: 48,
-                            color: Color(0xFF1E5AA5),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'Đăng nhập',
-                          style: theme.textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.w700,
-                            color: const Color(0xFF10243E),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Chào mừng bạn quay lại. Hãy tiếp tục hành trình học tiếng Anh của mình.',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: const Color(0xFF4A5B74),
-                            height: 1.4,
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        TextField(
-                          controller: _emailController,
-                          enabled: !_isLoading,
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
-                            labelText: 'Email',
-                            hintText: 'Nhập email của bạn',
-                            prefixIcon: const Icon(
-                              Icons.alternate_email_rounded,
-                            ),
-                            filled: true,
-                            fillColor: const Color(0xFFF7FAFF),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(14),
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 14),
-                        TextField(
-                          controller: _passwordController,
-                          enabled: !_isLoading,
-                          obscureText: _obscurePassword,
-                          decoration: InputDecoration(
-                            labelText: 'Mật khẩu',
-                            hintText: 'Nhập mật khẩu',
-                            prefixIcon: const Icon(Icons.lock_outline_rounded),
-                            suffixIcon: IconButton(
-                              onPressed: _isLoading
-                                  ? null
-                                  : () {
-                                      setState(() {
-                                        _obscurePassword = !_obscurePassword;
-                                      });
-                                    },
-                              icon: Icon(
-                                _obscurePassword
-                                    ? Icons.visibility_outlined
-                                    : Icons.visibility_off_outlined,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFFB83AF3), Color(0xFF6366F1), Color(0xFF00B4D8)],
+          ),
+        ),
+        child: Stack(
+          children: [
+            const _Bubble(top: 36, left: 20, size: 22),
+            const _Bubble(top: 90, right: 54, size: 16),
+            const _Bubble(top: 180, left: 40, size: 14),
+            const _Bubble(bottom: 120, right: 26, size: 18),
+            const _Bubble(bottom: 48, left: 58, size: 26),
+            SafeArea(
+              child: Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(18),
+                  child: FadeTransition(
+                    opacity: _fadeAnimation,
+                    child: SlideTransition(
+                      position: _slideAnimation,
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 390),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(24),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color(0x2A13214D),
+                                blurRadius: 24,
+                                offset: Offset(0, 14),
                               ),
-                            ),
-                            filled: true,
-                            fillColor: const Color(0xFFF7FAFF),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(14),
-                              borderSide: BorderSide.none,
-                            ),
+                            ],
                           ),
-                        ),
-                        const SizedBox(height: 14),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: _isLoading
-                                ? null
-                                : () {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          'Tính năng quên mật khẩu sẽ được cập nhật sớm.',
-                                        ),
-                                      ),
-                                    );
-                                  },
-                            child: const Text('Quên mật khẩu?'),
-                          ),
-                        ),
-                        AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 260),
-                          switchInCurve: Curves.easeOut,
-                          switchOutCurve: Curves.easeIn,
-                          transitionBuilder: (child, animation) {
-                            return SizeTransition(
-                              sizeFactor: animation,
-                              axisAlignment: -1,
-                              child: FadeTransition(
-                                opacity: animation,
-                                child: child,
-                              ),
-                            );
-                          },
-                          child: _errorMessage == null
-                              ? const SizedBox(key: ValueKey('no_error'))
-                              : Padding(
-                                  key: ValueKey(_errorMessage),
-                                  padding: const EdgeInsets.only(top: 4),
-                                  child: StatusMessageBanner(
-                                    message: _errorMessage!,
-                                    isError: true,
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                top: 96,
+                                left: 0,
+                                child: Container(
+                                  width: 140,
+                                  height: 88,
+                                  decoration: const BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Color(0xFF5C8EFF),
+                                        Color(0xFF739BFF),
+                                      ],
+                                    ),
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(28),
+                                      bottomRight: Radius.circular(28),
+                                    ),
                                   ),
                                 ),
-                        ),
-                        const SizedBox(height: 18),
-                        AnimatedScale(
-                          scale: _isLoading ? 0.985 : 1,
-                          duration: const Duration(milliseconds: 160),
-                          child: SizedBox(
-                            height: 48,
-                            child: ElevatedButton(
-                              onPressed: _isLoading ? null : _signInWithEmail,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF1E5AA5),
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(14),
+                              ),
+                              Positioned(
+                                bottom: 66,
+                                right: 0,
+                                child: Container(
+                                  width: 132,
+                                  height: 84,
+                                  decoration: const BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Color(0xFFCC57D1),
+                                        Color(0xFF7E67F2),
+                                      ],
+                                    ),
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(36),
+                                      bottomLeft: Radius.circular(36),
+                                    ),
+                                  ),
                                 ),
                               ),
-                              child: AnimatedSwitcher(
-                                duration: const Duration(milliseconds: 180),
-                                child: _isLoading
-                                    ? const SizedBox(
-                                        key: ValueKey('loading'),
-                                        width: 20,
-                                        height: 20,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          color: Colors.white,
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                  20,
+                                  24,
+                                  20,
+                                  16,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    const Center(
+                                      child: Text(
+                                        'LOGO',
+                                        style: TextStyle(
+                                          fontSize: 36,
+                                          letterSpacing: 2.4,
+                                          color: Color(0xFF9AA0B5),
+                                          fontWeight: FontWeight.w300,
                                         ),
-                                      )
-                                    : const Text(
-                                        'Đăng nhập bằng Email',
-                                        key: ValueKey('text'),
                                       ),
+                                    ),
+                                    const SizedBox(height: 24),
+                                    Row(
+                                      children: [
+                                        const Expanded(
+                                          child: Text(
+                                            'Đăng nhập',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              color: Color(0xFF4A5A85),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: TextButton(
+                                            onPressed: _isLoading
+                                                ? null
+                                                : widget.onSignUpPressed,
+                                            child: const Text(
+                                              'Đăng ký',
+                                              style: TextStyle(
+                                                color: Color(0xFF8A93A8),
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Container(
+                                      padding: const EdgeInsets.fromLTRB(
+                                        16,
+                                        16,
+                                        16,
+                                        14,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(18),
+                                        boxShadow: const [
+                                          BoxShadow(
+                                            color: Color(0x201B1A3D),
+                                            blurRadius: 20,
+                                            offset: Offset(0, 8),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          _buildInput(
+                                            controller: _emailController,
+                                            hint: 'Email',
+                                            icon: Icons.email_outlined,
+                                            enabled: !_isLoading,
+                                          ),
+                                          const SizedBox(height: 12),
+                                          _buildInput(
+                                            controller: _passwordController,
+                                            hint: 'Mật khẩu',
+                                            icon: _obscurePassword
+                                                ? Icons.visibility_outlined
+                                                : Icons.visibility_off_outlined,
+                                            enabled: !_isLoading,
+                                            obscureText: _obscurePassword,
+                                            onIconTap: () {
+                                              if (_isLoading) return;
+                                              setState(() {
+                                                _obscurePassword =
+                                                    !_obscurePassword;
+                                              });
+                                            },
+                                          ),
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: TextButton(
+                                              onPressed: _isLoading
+                                                  ? null
+                                                  : () {
+                                                      ScaffoldMessenger.of(
+                                                        context,
+                                                      ).showSnackBar(
+                                                        const SnackBar(
+                                                          content: Text(
+                                                            'Tính năng quên mật khẩu sẽ được cập nhật sớm.',
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                              child: const Text(
+                                                'Quên mật khẩu?',
+                                                style: TextStyle(fontSize: 12),
+                                              ),
+                                            ),
+                                          ),
+                                          AnimatedSwitcher(
+                                            duration: const Duration(
+                                              milliseconds: 220,
+                                            ),
+                                            child: _errorMessage == null
+                                                ? const SizedBox(
+                                                    key: ValueKey('no_error'),
+                                                  )
+                                                : Padding(
+                                                    key: ValueKey(
+                                                      _errorMessage,
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                          bottom: 8,
+                                                        ),
+                                                    child: StatusMessageBanner(
+                                                      message: _errorMessage!,
+                                                      isError: true,
+                                                    ),
+                                                  ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Transform.translate(
+                                      offset: const Offset(0, -12),
+                                      child: Center(
+                                        child: AnimatedScale(
+                                          scale: _isLoading ? 0.98 : 1,
+                                          duration: const Duration(
+                                            milliseconds: 150,
+                                          ),
+                                          child: DecoratedBox(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(999),
+                                              gradient: const LinearGradient(
+                                                colors: [
+                                                  Color(0xFF3AD8F6),
+                                                  Color(0xFF4F8BFF),
+                                                ],
+                                              ),
+                                              boxShadow: const [
+                                                BoxShadow(
+                                                  color: Color(0x5544A3FF),
+                                                  blurRadius: 14,
+                                                  offset: Offset(0, 7),
+                                                ),
+                                              ],
+                                            ),
+                                            child: ElevatedButton(
+                                              onPressed: _isLoading
+                                                  ? null
+                                                  : _signInWithEmail,
+                                              style: ElevatedButton.styleFrom(
+                                                elevation: 0,
+                                                shadowColor: Colors.transparent,
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                                foregroundColor: Colors.white,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      horizontal: 34,
+                                                      vertical: 14,
+                                                    ),
+                                              ),
+                                              child: _isLoading
+                                                  ? const SizedBox(
+                                                      width: 18,
+                                                      height: 18,
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                            strokeWidth: 2,
+                                                            color: Colors.white,
+                                                          ),
+                                                    )
+                                                  : const Text('Login'),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    OutlinedButton.icon(
+                                      onPressed: _isLoading
+                                          ? null
+                                          : _signInWithGoogle,
+                                      icon: const Icon(
+                                        Icons.g_mobiledata_rounded,
+                                        size: 24,
+                                      ),
+                                      label: const Text('Tiếp tục với Google'),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const Text(
+                                          'Chưa có tài khoản?',
+                                          style: TextStyle(
+                                            color: Color(0xFF6F7890),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: _isLoading
+                                              ? null
+                                              : widget.onSignUpPressed,
+                                          child: const Text(
+                                            'Đăng ký',
+                                            style: TextStyle(
+                                              color: Color(0xFF7E45D6),
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 12),
-                        SizedBox(
-                          height: 48,
-                          child: OutlinedButton.icon(
-                            onPressed: _isLoading ? null : _signInWithGoogle,
-                            icon: const Icon(
-                              Icons.g_mobiledata_rounded,
-                              size: 28,
-                            ),
-                            label: const Text('Tiếp tục với Google'),
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: const Color(0xFF18314F),
-                              side: const BorderSide(color: Color(0xFFD4DEEC)),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 14),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text('Bạn chưa có tài khoản?'),
-                            TextButton(
-                              onPressed: _isLoading
-                                  ? null
-                                  : widget.onSignUpPressed,
-                              child: const Text('Đăng ký ngay'),
-                            ),
-                          ],
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInput({
+    required TextEditingController controller,
+    required String hint,
+    required IconData icon,
+    required bool enabled,
+    bool obscureText = false,
+    VoidCallback? onIconTap,
+  }) {
+    return TextField(
+      controller: controller,
+      enabled: enabled,
+      obscureText: obscureText,
+      decoration: InputDecoration(
+        hintText: hint,
+        isDense: true,
+        suffixIcon: IconButton(
+          onPressed: enabled ? onIconTap : null,
+          icon: Icon(icon, size: 20, color: const Color(0xFF98A1B9)),
+        ),
+        filled: true,
+        fillColor: const Color(0xFFF8FAFF),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+      ),
+    );
+  }
+}
+
+class _Bubble extends StatelessWidget {
+  final double? top;
+  final double? left;
+  final double? right;
+  final double? bottom;
+  final double size;
+
+  const _Bubble({
+    this.top,
+    this.left,
+    this.right,
+    this.bottom,
+    required this.size,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: top,
+      left: left,
+      right: right,
+      bottom: bottom,
+      child: Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: Colors.white.withValues(alpha: 0.55),
+            width: 1.6,
           ),
         ),
       ),

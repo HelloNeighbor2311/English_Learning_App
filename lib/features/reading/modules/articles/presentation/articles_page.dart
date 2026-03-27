@@ -1,4 +1,14 @@
-﻿// Feature: reading | Module: articles
+﻿import 'package:flutter/material.dart';
 
-class ArticlesPage {}
+import 'package:english_learning_app/shared/widgets/feature_placeholder_screen.dart';
 
+class ArticlesPage extends StatelessWidget {
+  const ArticlesPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const FeaturePlaceholderScreen(
+      title: 'Articles',
+    );
+  }
+}

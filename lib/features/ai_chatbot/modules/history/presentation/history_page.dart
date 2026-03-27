@@ -1,4 +1,14 @@
-﻿// Feature: ai_chatbot | Module: history
+﻿import 'package:flutter/material.dart';
 
-class HistoryPage {}
+import 'package:english_learning_app/shared/widgets/feature_placeholder_screen.dart';
 
+class HistoryPage extends StatelessWidget {
+  const HistoryPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const FeaturePlaceholderScreen(
+      title: 'History',
+    );
+  }
+}

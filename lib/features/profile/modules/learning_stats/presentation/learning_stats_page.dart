@@ -1,4 +1,14 @@
-﻿// Feature: profile | Module: learning_stats
+﻿import 'package:flutter/material.dart';
 
-class LearningStatsPage {}
+import 'package:english_learning_app/shared/widgets/feature_placeholder_screen.dart';
 
+class LearningStatsPage extends StatelessWidget {
+  const LearningStatsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const FeaturePlaceholderScreen(
+      title: 'Learning Stats',
+    );
+  }
+}

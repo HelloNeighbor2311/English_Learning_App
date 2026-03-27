@@ -1,4 +1,14 @@
-﻿// Feature: entertainment | Module: guess_word
+﻿import 'package:flutter/material.dart';
 
-class GuessWordPage {}
+import 'package:english_learning_app/shared/widgets/feature_placeholder_screen.dart';
 
+class GuessWordPage extends StatelessWidget {
+  const GuessWordPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const FeaturePlaceholderScreen(
+      title: 'Guess Word',
+    );
+  }
+}

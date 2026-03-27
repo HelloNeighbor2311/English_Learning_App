@@ -1,4 +1,14 @@
-﻿// Feature: home | Module: featured_words
+﻿import 'package:flutter/material.dart';
 
-class FeaturedWordsPage {}
+import 'package:english_learning_app/shared/widgets/feature_placeholder_screen.dart';
 
+class FeaturedWordsPage extends StatelessWidget {
+  const FeaturedWordsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const FeaturePlaceholderScreen(
+      title: 'Featured Words',
+    );
+  }
+}

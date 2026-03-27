@@ -1,4 +1,14 @@
-﻿// Feature: ai_scanner | Module: object_detail
+﻿import 'package:flutter/material.dart';
 
-class ObjectDetailPage {}
+import 'package:english_learning_app/shared/widgets/feature_placeholder_screen.dart';
 
+class ObjectDetailPage extends StatelessWidget {
+  const ObjectDetailPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const FeaturePlaceholderScreen(
+      title: 'Object Detail',
+    );
+  }
+}

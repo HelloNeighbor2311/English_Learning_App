@@ -1,4 +1,14 @@
-﻿// Feature: ai_chatbot | Module: chat
+﻿import 'package:flutter/material.dart';
 
-class ChatPage {}
+import 'package:english_learning_app/shared/widgets/feature_placeholder_screen.dart';
 
+class ChatPage extends StatelessWidget {
+  const ChatPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const FeaturePlaceholderScreen(
+      title: 'Chat',
+    );
+  }
+}

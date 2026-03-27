@@ -1,4 +1,14 @@
-﻿// Feature: ai_scanner | Module: camera_permission
+﻿import 'package:flutter/material.dart';
 
-class CameraPermissionPage {}
+import 'package:english_learning_app/shared/widgets/feature_placeholder_screen.dart';
 
+class CameraPermissionPage extends StatelessWidget {
+  const CameraPermissionPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const FeaturePlaceholderScreen(
+      title: 'Camera Permission',
+    );
+  }
+}

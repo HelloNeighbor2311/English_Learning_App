@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../bootstrap/firebase_bootstrap.dart';
+import '../core/theme/app_theme.dart';
 import '../core/services/supabase_service.dart';
 import '../features/authentication/modules/session/presentation/auth_session_gate.dart';
 
@@ -32,10 +33,7 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'English Learning App',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-      ),
+      theme: AppTheme.lightTheme,
       home: FutureBuilder<void>(
         future: _initializationFuture,
         builder: (context, snapshot) {

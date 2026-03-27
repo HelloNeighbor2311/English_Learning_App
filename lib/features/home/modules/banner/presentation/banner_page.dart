@@ -1,4 +1,14 @@
-﻿// Feature: home | Module: banner
+﻿import 'package:flutter/material.dart';
 
-class BannerPage {}
+import 'package:english_learning_app/shared/widgets/feature_placeholder_screen.dart';
 
+class BannerPage extends StatelessWidget {
+  const BannerPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const FeaturePlaceholderScreen(
+      title: 'Banner',
+    );
+  }
+}
