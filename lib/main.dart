@@ -67,9 +67,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
           }
         }
         // Loading state
-        return const Scaffold(
-          body: Center(child: CircularProgressIndicator()),
-        );
+        return const Scaffold(body: Center(child: CircularProgressIndicator()));
       },
     );
   }
@@ -136,10 +134,7 @@ class _FirestoreConnectionPageState extends State<FirestoreConnectionPage> {
       appBar: AppBar(
         title: const Text('Home'),
         actions: [
-          IconButton(
-            onPressed: _signOut,
-            icon: const Icon(Icons.logout),
-          ),
+          IconButton(onPressed: _signOut, icon: const Icon(Icons.logout)),
         ],
       ),
       body: Padding(

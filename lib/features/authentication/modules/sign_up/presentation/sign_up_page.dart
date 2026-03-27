@@ -4,10 +4,7 @@ import 'package:english_learning_app/core/services/authentication_service.dart';
 class SignUpPage extends StatefulWidget {
   final VoidCallback onSignInPressed;
 
-  const SignUpPage({
-    super.key,
-    required this.onSignInPressed,
-  });
+  const SignUpPage({super.key, required this.onSignInPressed});
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
@@ -133,4 +130,3 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 }
-
