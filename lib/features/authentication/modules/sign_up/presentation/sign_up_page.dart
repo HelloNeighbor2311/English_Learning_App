@@ -1,5 +1,10 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:english_learning_app/core/services/authentication_service.dart';
+import 'package:english_learning_app/core/services/firestore_service.dart';
+import '../data/sign_up_repository_impl.dart';
+import '../data/user_remote_datasource.dart';
+import '../domain/sign_up_use_case.dart';
+import 'sign_up_state.dart';
 
 class SignUpPage extends StatefulWidget {
   final VoidCallback onSignInPressed;
@@ -11,12 +16,27 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  late final SignUpUseCase _signUpUseCase;
+  late SignUpState _state;
+
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  bool _isLoading = false;
-  String? _errorMessage;
-  String _selectedLevel = 'Beginner';
+  late String _selectedLevel;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedLevel = 'Beginner';
+    _state = SignUpState();
+
+    // Initialize dependencies
+    final authService = AuthenticationService.instance;
+    final firestoreService = FirestoreService.instance;
+    final userDataSource = UserRemoteDataSourceImpl(firestoreService);
+    final repository = SignUpRepositoryImpl(authService, userDataSource);
+    _signUpUseCase = SignUpUseCase(repository);
+  }
 
   @override
   void dispose() {
@@ -26,29 +46,64 @@ class _SignUpPageState extends State<SignUpPage> {
     super.dispose();
   }
 
-  Future<void> _signUp() async {
-    if (_passwordController.text != _confirmPasswordController.text) {
-      setState(() => _errorMessage = 'Mat khau khong khop');
-      return;
-    }
+  Future<void> _handleSignUp() async {
+    // Clear previous messages
+    setState(() {
+      _state = SignUpState();
+    });
 
-    setState(() => _isLoading = true);
+    // Call use case
+    setState(() {
+      _state = _state.copyWith(status: SignUpStatus.loading);
+    });
+
     try {
-      await AuthenticationService.instance.signUpWithEmail(
-        email: _emailController.text.trim(),
+      final user = await _signUpUseCase(
+        email: _emailController.text,
         password: _passwordController.text,
+        confirmPassword: _confirmPasswordController.text,
+        level: _selectedLevel,
       );
+
       if (!mounted) return;
+
       setState(() {
-        _errorMessage = null;
-        _isLoading = false;
+        _state = _state.copyWith(
+          status: SignUpStatus.success,
+          successMessage: 'Đăng ký thành công!',
+        );
       });
-      // TODO: Save user profile to Firestore with selected level
-    } on Exception catch (e) {
+
+      // Clear form
+      _emailController.clear();
+      _passwordController.clear();
+      _confirmPasswordController.clear();
+
+      // Show success message and navigate
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Chào mừng, ${user.email}!'),
+            backgroundColor: Colors.green,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    } on FormatException catch (e) {
       if (!mounted) return;
       setState(() {
-        _errorMessage = 'Dang ky that bai: ${e.toString()}';
-        _isLoading = false;
+        _state = _state.copyWith(
+          status: SignUpStatus.failure,
+          errorMessage: e.message,
+        );
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _state = _state.copyWith(
+          status: SignUpStatus.failure,
+          errorMessage: e.toString(),
+        );
       });
     }
   }
@@ -56,72 +111,159 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Dang Ky')),
+      appBar: AppBar(title: const Text('Đăng Ký Tài Khoản')),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
           child: Column(
             children: [
+              // Error message
+              if (_state.isFailure)
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.red.shade100,
+                    border: Border.all(color: Colors.red),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    _state.errorMessage ?? 'Đã xảy ra lỗi',
+                    style: TextStyle(color: Colors.red.shade800),
+                  ),
+                ),
+
+              // Success message
+              if (_state.isSuccess)
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.green.shade100,
+                    border: Border.all(color: Colors.green),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    _state.successMessage ?? 'Thành công',
+                    style: TextStyle(color: Colors.green.shade800),
+                  ),
+                ),
+
+              // Email field
               TextField(
                 controller: _emailController,
-                decoration: const InputDecoration(
+                enabled: !_state.isLoading,
+                decoration: InputDecoration(
                   hintText: 'Email',
-                  border: OutlineInputBorder(),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  prefixIcon: const Icon(Icons.email),
                 ),
                 keyboardType: TextInputType.emailAddress,
               ),
               const SizedBox(height: 16),
+
+              // Password field
               TextField(
                 controller: _passwordController,
-                decoration: const InputDecoration(
-                  hintText: 'Mat khau',
-                  border: OutlineInputBorder(),
+                enabled: !_state.isLoading,
+                decoration: InputDecoration(
+                  hintText: 'Mật Khẩu',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  prefixIcon: const Icon(Icons.lock),
+                  helperText: 'Tối thiểu 6 ký tự',
                 ),
                 obscureText: true,
               ),
               const SizedBox(height: 16),
+
+              // Confirm password field
               TextField(
                 controller: _confirmPasswordController,
-                decoration: const InputDecoration(
-                  hintText: 'Xac nhan mat khau',
-                  border: OutlineInputBorder(),
+                enabled: !_state.isLoading,
+                decoration: InputDecoration(
+                  hintText: 'Xác Nhận Mật Khẩu',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  prefixIcon: const Icon(Icons.lock_outline),
                 ),
                 obscureText: true,
               ),
               const SizedBox(height: 24),
-              const Text('Chon trinh do tieng Anh:'),
-              const SizedBox(height: 12),
-              SegmentedButton<String>(
-                segments: const [
-                  ButtonSegment(label: Text('Beginner'), value: 'Beginner'),
-                  ButtonSegment(
-                    label: Text('Intermediate'),
-                    value: 'Intermediate',
-                  ),
-                  ButtonSegment(label: Text('Advanced'), value: 'Advanced'),
-                ],
-                selected: {_selectedLevel},
-                onSelectionChanged: (Set<String> newSelection) {
-                  setState(() => _selectedLevel = newSelection.first);
-                },
+
+              // Level selector
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Chọn Trình Độ Tiếng Anh:',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 12),
+                    SegmentedButton<String>(
+                      segments: const [
+                        ButtonSegment(
+                          label: Text('Beginner'),
+                          value: 'Beginner',
+                        ),
+                        ButtonSegment(
+                          label: Text('Intermediate'),
+                          value: 'Intermediate',
+                        ),
+                        ButtonSegment(
+                          label: Text('Advanced'),
+                          value: 'Advanced',
+                        ),
+                      ],
+                      selected: {_selectedLevel},
+                      onSelectionChanged: (Set<String> newSelection) {
+                        if (!_state.isLoading) {
+                          setState(() => _selectedLevel = newSelection.first);
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 24),
-              if (_errorMessage != null)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: Text(
-                    _errorMessage!,
-                    style: const TextStyle(color: Colors.red),
-                  ),
+
+              // Sign up button
+              SizedBox(
+                width: double.infinity,
+                height: 48,
+                child: ElevatedButton(
+                  onPressed: _state.isLoading ? null : _handleSignUp,
+                  child: _state.isLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Text('Đăng Ký', style: TextStyle(fontSize: 16)),
                 ),
-              FilledButton(
-                onPressed: _isLoading ? null : _signUp,
-                child: Text(_isLoading ? 'Dang xu ly...' : 'Dang Ky'),
               ),
               const SizedBox(height: 16),
-              TextButton(
-                onPressed: _isLoading ? null : widget.onSignInPressed,
-                child: const Text('Da co tai khoan? Dang nhap'),
+
+              // Sign in link
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Đã có tài khoản? '),
+                  TextButton(
+                    onPressed: _state.isLoading ? null : widget.onSignInPressed,
+                    child: const Text('Đăng Nhập'),
+                  ),
+                ],
               ),
             ],
           ),

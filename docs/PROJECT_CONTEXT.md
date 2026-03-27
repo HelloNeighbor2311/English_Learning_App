@@ -9,6 +9,7 @@
 ## I. Project Overview
 
 ### Objectives
+
 - Build an intelligent English learning app on Flutter platform
 - Integrate AI technologies (Scanner for object detection, AI Chatbot)
 - Gamification system (XP, Levels, Streaks, Achievements)
@@ -16,10 +17,12 @@
 - Offline-first learning with cloud sync
 
 ### Target Users
+
 - Students, office workers, English learners
 - Support for Beginner, Intermediate, Advanced levels
 
 ### Platform & Constraints
+
 - **Primary**: Android (minimum 6.0+)
 - **Language Support**: English ↔ Vietnamese only
 - **MVP Phase**: Mobile app (no web version yet)
@@ -30,6 +33,7 @@
 ## II. Tech Stack
 
 ### Backend & Cloud Services
+
 - **Firebase**:
   - Authentication (Email/Password, Google Sign-in)
   - Firestore (NoSQL database)
@@ -39,11 +43,13 @@
   - PostgreSQL (for complex queries if needed)
 
 ### Frontend Framework
+
 - **Flutter 3.10+**: Cross-platform UI development
 - **Dart**: Programming language
 - **State Management**: (to be determined - might use Provider/Riverpod/Bloc)
 
 ### Key Dependencies
+
 ```yaml
 firebase_core: ^3.15.2
 cloud_firestore: ^5.6.11
@@ -53,6 +59,7 @@ supabase_flutter: ^2.5.0
 ```
 
 ### Android Build Tools
+
 - Google Services Gradle plugin (Firebase config)
 - Firebase BoM for dependency management
 - Min SDK: Android 6.0+
@@ -139,6 +146,7 @@ lib/
 ```
 
 ### Architecture Pattern
+
 - **Clean Architecture**: Each feature has 3 layers
   - `presentation/`: Pages, Widgets, State Management
   - `domain/`: Business Logic, Entities, Repository Interfaces, Use Cases
@@ -151,6 +159,7 @@ lib/
 ## IV. Current Setup Status
 
 ### ✅ Completed
+
 1. **Project Foundation**
    - Folder structure with 39 modules across 11 features
    - 273 skeleton files (page, entity, repository, datasource, etc.)
@@ -182,6 +191,7 @@ lib/
    - No compilation errors
 
 ### ⚠️ Pending Firebase Configuration
+
 - Enable Google Sign-in provider in Firebase Console (Settings → Authentication → Sign-in method)
 - Enable Email/Password provider
 - Verify Firestore user-based rules are published
@@ -210,12 +220,14 @@ AuthWrapper (Stream listener)
 ```
 
 ### Sign Up Flow
+
 1. User enters email, password, chooses level
 2. Create account in Firebase Auth
 3. Save profile to Firestore (`/users/{uid}`)
 4. AI generates starter vocabulary (TODO)
 
 ### Sign In Flow
+
 1. Email/Password or Google Sign-in
 2. Firebase Auth returns user
 3. AuthWrapper listens and routes to Home
@@ -225,6 +237,7 @@ AuthWrapper (Stream listener)
 ## VI. Services Overview
 
 ### AuthenticationService
+
 ```dart
 // Key methods:
 - signUpWithEmail(email, password)
@@ -236,6 +249,7 @@ AuthWrapper (Stream listener)
 ```
 
 ### FirestoreService
+
 ```dart
 // Key methods:
 - setDocument(collectionPath, documentId, data)
@@ -244,6 +258,7 @@ AuthWrapper (Stream listener)
 ```
 
 ### SupabaseService
+
 ```dart
 // Key methods:
 - uploadFile(bucket, filePath, fileData)
@@ -266,12 +281,14 @@ AuthWrapper (Stream listener)
 ## VIII. How to Run
 
 ### Prerequisites
+
 - Flutter 3.10+
 - Android SDK (6.0+) or emulator
 - Java JDK (for keytool, already detected)
 - Firebase project set up
 
 ### Build & Run
+
 ```bash
 cd d:\PTUD\english_learning_app
 
@@ -286,6 +303,7 @@ flutter run -d <device-id>
 ```
 
 ### First Test
+
 1. App shows **Sign In Page**
 2. Options:
    - Sign Up: Create new account with level
@@ -299,6 +317,7 @@ flutter run -d <device-id>
 ## IX. Next Steps (Priority Order)
 
 ### Short-term (Critical)
+
 1. **Enable Firebase Providers** (if not done)
    - Google Sign-in activation
    - Email/Password activation
@@ -317,12 +336,14 @@ flutter run -d <device-id>
    - Learning history sync
 
 ### Medium-term (MVP Features)
+
 5. Implement Home module (banner, search, topic dictionary)
 6. Implement Dictionary module (saved words, flashcard, quiz)
 7. Implement Gamification (XP/Level, achievements, streaks)
 8. Implement Entertainment games (guess word, matching)
 
 ### Long-term (Advanced Features)
+
 9. AI Scanner (YOLO integration for object detection)
 10. AI Chatbot (GPT/Gemini integration)
 11. Listening module (podcasts, interviews, shadowing)
@@ -334,21 +355,25 @@ flutter run -d <device-id>
 ## X. Key Decisions & Notes
 
 ### Architecture Choices
+
 - **Singleton Services**: Authentication, Firestore, Supabase (easy access, shared state)
 - **Stream-based Auth**: AuthWrapper listens to FirebaseAuth.authStateChanges() for reactive routing
 - **User-based Firestore Rules**: Security-first approach; each user owns their data
 
 ### Design Patterns
+
 - **Clean Architecture**: Separation of concerns (presentation/domain/data)
 - **Feature-based Modules**: Scale horizontally; add features independently
 - **Skeleton-first**: Files created empty; content added afterward
 
 ### Security Considerations
+
 - Firestore Rules enforce user-based access
 - Google-services.json with credentials (add to .gitignore)
 - Supabase anon key for storage (public; use policies for storage if needed)
 
 ### Testing & Verification
+
 - No unit tests yet (skeleton phase)
 - Manual testing via Flutter app
 - Firebase Console for data verification
@@ -358,6 +383,7 @@ flutter run -d <device-id>
 ## XI. Contact & Questions
 
 For detailed setup steps, refer to:
+
 - `/docs/firestore_setup.md` - Firestore rules & initialization
 - `/docs/firebase_connect_done.md` - Firebase integration guide
 - Code comments in services for API details
