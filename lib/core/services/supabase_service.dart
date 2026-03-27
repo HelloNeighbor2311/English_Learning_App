@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseService {
@@ -13,10 +14,7 @@ class SupabaseService {
     required String supabaseUrl,
     required String supabaseAnonKey,
   }) async {
-    await Supabase.initialize(
-      url: supabaseUrl,
-      anonKey: supabaseAnonKey,
-    );
+    await Supabase.initialize(url: supabaseUrl, anonKey: supabaseAnonKey);
     _client = Supabase.instance.client;
   }
 
@@ -24,7 +22,7 @@ class SupabaseService {
   Future<String> uploadFile({
     required String bucket,
     required String filePath,
-    required List<int> fileData,
+    required Uint8List fileData,
   }) async {
     final path = await _client.storage
         .from(bucket)
@@ -33,10 +31,7 @@ class SupabaseService {
   }
 
   // Get public URL for file
-  String getPublicUrl({
-    required String bucket,
-    required String filePath,
-  }) {
+  String getPublicUrl({required String bucket, required String filePath}) {
     final url = _client.storage.from(bucket).getPublicUrl(filePath);
     return url;
   }

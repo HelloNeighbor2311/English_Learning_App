@@ -7,17 +7,41 @@ import 'core/services/supabase_service.dart';
 import 'features/authentication/modules/sign_in/presentation/sign_in_page.dart';
 import 'features/authentication/modules/sign_up/presentation/sign_up_page.dart';
 
-Future<void> main() async {
-  await FirebaseBootstrap.initialize();
-  await SupabaseService.instance.initialize(
-    supabaseUrl: 'https://addjdomywbpzguehtdgi.supabase.co',
-    supabaseAnonKey: 'sb_publishable_d183qj_43wFoD28oqON4Fg_7qru0CFp',
-  );
+void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late Future<void> _initializationFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializationFuture = _initializeApp();
+  }
+
+  Future<void> _initializeApp() async {
+    try {
+      // Initialize Firebase
+      await FirebaseBootstrap.initialize();
+      
+      // Initialize Supabase
+      await SupabaseService.instance.initialize(
+        supabaseUrl: 'https://addjdomywbpzguehtdgi.supabase.co',
+        supabaseAnonKey: 'sb_publishable_d183qj_43wFoD28oqON4Fg_7qru0CFp',
+      );
+    } catch (e) {
+      print('Initialization error: $e');
+      // Continue anyway, but services may not work
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +49,51 @@ class MyApp extends StatelessWidget {
       title: 'English Learning App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        useMaterial3: true,
       ),
-      home: const AuthWrapper(),
+      home: FutureBuilder<void>(
+        future: _initializationFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Scaffold(
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                    SizedBox(height: 16),
+                    Text('Đang khởi động ứng dụng...'),
+                  ],
+                ),
+              ),
+            );
+          }
+
+          if (snapshot.hasError) {
+            return Scaffold(
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.error, color: Colors.red, size: 48),
+                    const SizedBox(height: 16),
+                    const Text('Lỗi khởi động ứng dụng'),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Error: ${snapshot.error}',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+
+          // Initialization successful, show auth wrapper
+          return const AuthWrapper();
+        },
+      ),
     );
   }
 }
@@ -46,6 +113,39 @@ class _AuthWrapperState extends State<AuthWrapper> {
     return StreamBuilder(
       stream: AuthenticationService.instance.authStateChanges,
       builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+
+        if (snapshot.hasError) {
+          return Scaffold(
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error, color: Colors.red, size: 48),
+                  const SizedBox(height: 16),
+                  const Text('Lỗi xác thực'),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Error: ${snapshot.error}',
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: () => setState(() => _isSignIn = true),
+                    child: const Text('Thử lại'),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+
         if (snapshot.connectionState == ConnectionState.active) {
           final user = snapshot.data;
           if (user != null) {
@@ -66,8 +166,13 @@ class _AuthWrapperState extends State<AuthWrapper> {
                   );
           }
         }
+
         // Loading state
-        return const Scaffold(body: Center(child: CircularProgressIndicator()));
+        return const Scaffold(
+          body: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
       },
     );
   }
