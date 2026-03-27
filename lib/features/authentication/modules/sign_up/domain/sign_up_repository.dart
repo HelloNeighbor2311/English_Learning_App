@@ -8,6 +8,5 @@ abstract class SignUpRepository {
   Future<UserEntity> signUpWithEmail({
     required String email,
     required String password,
-    required String level,
   });
 }

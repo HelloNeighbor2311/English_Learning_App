@@ -12,7 +12,6 @@ class SignUpUseCase {
     required String email,
     required String password,
     required String confirmPassword,
-    required String level,
   }) async {
     // Validation
     if (email.trim().isEmpty) {
@@ -35,7 +34,6 @@ class SignUpUseCase {
     return await repository.signUpWithEmail(
       email: email.trim(),
       password: password,
-      level: level,
     );
   }
 }

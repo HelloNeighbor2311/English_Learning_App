@@ -17,7 +17,6 @@ class SignUpRepositoryImpl implements SignUpRepository {
   Future<UserEntity> signUpWithEmail({
     required String email,
     required String password,
-    required String level,
   }) async {
     try {
       // Step 1: Create user in Firebase Auth
@@ -35,7 +34,7 @@ class SignUpRepositoryImpl implements SignUpRepository {
       final user = UserModel(
         uid: uid,
         email: email,
-        level: level,
+        level: '',
         createdAt: DateTime.now(),
         emailVerified: false,
       );

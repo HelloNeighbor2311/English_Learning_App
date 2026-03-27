@@ -27,6 +27,14 @@ class FirestoreService {
     return ref.id;
   }
 
+  Future<Map<String, dynamic>?> getDocument({
+    required String collectionPath,
+    required String documentId,
+  }) async {
+    final doc = await _db.collection(collectionPath).doc(documentId).get();
+    return doc.data();
+  }
+
   Stream<QuerySnapshot<Map<String, dynamic>>> watchCollection(
     String collectionPath,
   ) {

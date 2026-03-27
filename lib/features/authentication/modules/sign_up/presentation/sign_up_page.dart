@@ -24,7 +24,6 @@ class _SignUpPageState extends State<SignUpPage>
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  late String _selectedLevel;
 
   late final AnimationController _entranceController;
   late final Animation<double> _fadeAnimation;
@@ -33,7 +32,6 @@ class _SignUpPageState extends State<SignUpPage>
   @override
   void initState() {
     super.initState();
-    _selectedLevel = 'Beginner';
     _state = SignUpState();
 
     final authService = AuthenticationService.instance;
@@ -83,7 +81,6 @@ class _SignUpPageState extends State<SignUpPage>
         email: _emailController.text,
         password: _passwordController.text,
         confirmPassword: _confirmPasswordController.text,
-        level: _selectedLevel,
       );
 
       if (!mounted) return;
@@ -302,45 +299,16 @@ class _SignUpPageState extends State<SignUpPage>
                                             enabled: !_state.isLoading,
                                             obscureText: true,
                                           ),
-                                          const SizedBox(height: 14),
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 8,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: const Color(0xFFF5F7FF),
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                            ),
-                                            child: SegmentedButton<String>(
-                                              style: const ButtonStyle(
-                                                visualDensity:
-                                                    VisualDensity.compact,
+                                          const SizedBox(height: 10),
+                                          const Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                              'Trình độ học sẽ được chọn ở lần đầu vào trang chủ.',
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xFF7681A3),
+                                                fontWeight: FontWeight.w500,
                                               ),
-                                              segments: const [
-                                                ButtonSegment(
-                                                  label: Text('Beginner'),
-                                                  value: 'Beginner',
-                                                ),
-                                                ButtonSegment(
-                                                  label: Text('Inter'),
-                                                  value: 'Intermediate',
-                                                ),
-                                                ButtonSegment(
-                                                  label: Text('Adv'),
-                                                  value: 'Advanced',
-                                                ),
-                                              ],
-                                              selected: {_selectedLevel},
-                                              onSelectionChanged:
-                                                  (Set<String> value) {
-                                                    if (_state.isLoading)
-                                                      return;
-                                                    setState(() {
-                                                      _selectedLevel =
-                                                          value.first;
-                                                    });
-                                                  },
                                             ),
                                           ),
                                           AnimatedSwitcher(
