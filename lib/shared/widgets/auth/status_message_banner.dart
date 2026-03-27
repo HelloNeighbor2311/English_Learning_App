@@ -12,10 +12,16 @@ class StatusMessageBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final background = isError ? const Color(0xFFFFEEF0) : const Color(0xFFEAF8EF);
+    final background = isError
+        ? const Color(0xFFFFEEF0)
+        : const Color(0xFFEAF8EF);
     final border = isError ? const Color(0xFFFFC9CF) : const Color(0xFFB8E5C6);
-    final iconColor = isError ? const Color(0xFFC62839) : const Color(0xFF1B7F3A);
-    final textColor = isError ? const Color(0xFF8F1F2D) : const Color(0xFF1E5F36);
+    final iconColor = isError
+        ? const Color(0xFFC62839)
+        : const Color(0xFF1B7F3A);
+    final textColor = isError
+        ? const Color(0xFF8F1F2D)
+        : const Color(0xFF1E5F36);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -33,10 +39,7 @@ class StatusMessageBanner extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           Expanded(
-            child: Text(
-              message,
-              style: TextStyle(color: textColor),
-            ),
+            child: Text(message, style: TextStyle(color: textColor)),
           ),
         ],
       ),
