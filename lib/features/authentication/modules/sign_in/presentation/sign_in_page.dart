@@ -74,10 +74,16 @@ class _SignInPageState extends State<SignInPage>
         _errorMessage = null;
         _isLoading = false;
       });
-    } on Exception catch (e) {
+    } on FormatException catch (e) {
       if (!mounted) return;
       setState(() {
-        _errorMessage = 'Đăng nhập thất bại: ${e.toString()}';
+        _errorMessage = e.message;
+        _isLoading = false;
+      });
+    } on Exception {
+      if (!mounted) return;
+      setState(() {
+        _errorMessage = 'Đăng nhập thất bại. Vui lòng thử lại.';
         _isLoading = false;
       });
     }

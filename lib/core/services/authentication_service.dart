@@ -7,9 +7,14 @@ class AuthenticationService {
 
   static final AuthenticationService instance = AuthenticationService._();
 
-  static const String _googleWebClientId = String.fromEnvironment(
+  static const String _googleWebClientIdFromEnv = String.fromEnvironment(
     'GOOGLE_WEB_CLIENT_ID',
   );
+  static const String _googleWebClientIdDefault =
+      '338474234583-ii6s8ol5j5tuviu50n7i75qelttg8jb9.apps.googleusercontent.com';
+  static final String _googleWebClientId = _googleWebClientIdFromEnv.isNotEmpty
+      ? _googleWebClientIdFromEnv
+      : _googleWebClientIdDefault;
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   GoogleSignIn? _googleSignIn;
@@ -41,19 +46,39 @@ class AuthenticationService {
     required String email,
     required String password,
   }) async {
-    return await _firebaseAuth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    try {
+      return await _firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on FirebaseAuthException catch (e) {
+      throw FormatException(_mapSignInError(e));
+    }
+  }
+
+  String _mapSignInError(FirebaseAuthException e) {
+    switch (e.code) {
+      case 'invalid-credential':
+      case 'wrong-password':
+      case 'user-not-found':
+        return 'Tên đăng nhập hoặc mật khẩu không đúng.';
+      case 'invalid-email':
+        return 'Email không hợp lệ. Vui lòng kiểm tra lại.';
+      case 'user-disabled':
+        return 'Tài khoản đã bị vô hiệu hóa. Vui lòng liên hệ hỗ trợ.';
+      case 'too-many-requests':
+        return 'Bạn thử sai quá nhiều lần. Vui lòng thử lại sau ít phút.';
+      case 'network-request-failed':
+        return 'Lỗi mạng. Vui lòng kiểm tra kết nối và thử lại.';
+      default:
+        return 'Đăng nhập thất bại. Vui lòng thử lại.';
+    }
   }
 
   // Sign in with Google
   Future<UserCredential> signInWithGoogle() async {
     if (kIsWeb && _googleWebClientId.isEmpty) {
-      throw Exception(
-        'Thiếu GOOGLE_WEB_CLIENT_ID cho web. '
-        'Hãy chạy với --dart-define=GOOGLE_WEB_CLIENT_ID=<your-client-id>.',
-      );
+      throw Exception('Google Sign-In web chưa được cấu hình client ID.');
     }
 
     final GoogleSignInAccount? googleUser = await _getGoogleSignIn().signIn();
