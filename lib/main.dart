@@ -148,17 +148,37 @@ class _AuthWrapperState extends State<AuthWrapper> {
             return const FirestoreConnectionPage();
           } else {
             // User is not signed in, show auth pages
-            return _isSignIn
+            final authPage = _isSignIn
                 ? SignInPage(
+                    key: const ValueKey('sign_in_page'),
                     onSignUpPressed: () {
                       setState(() => _isSignIn = false);
                     },
                   )
                 : SignUpPage(
+                    key: const ValueKey('sign_up_page'),
                     onSignInPressed: () {
                       setState(() => _isSignIn = true);
                     },
                   );
+
+            return AnimatedSwitcher(
+              duration: const Duration(milliseconds: 420),
+              switchInCurve: Curves.easeOutCubic,
+              switchOutCurve: Curves.easeInCubic,
+              transitionBuilder: (child, animation) {
+                final slide = Tween<Offset>(
+                  begin: const Offset(0.06, 0),
+                  end: Offset.zero,
+                ).animate(animation);
+
+                return FadeTransition(
+                  opacity: animation,
+                  child: SlideTransition(position: slide, child: child),
+                );
+              },
+              child: authPage,
+            );
           }
         }
 
